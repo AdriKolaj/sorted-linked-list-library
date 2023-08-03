@@ -6,10 +6,10 @@ require_once 'src/sorted_linked_list_exceptions.php';
 
 use SortedLinkedList\SortedLinkedList;
 
-$intList = new SortedLinkedList('string');
+$intList = new SortedLinkedList('int');
 
 $intList->add(5);
 $intList->add(2);
 $intList->add(6);
 
-$intList->remove(2);
+// $intList->removeByIndex(2);

@@ -127,6 +127,62 @@ class SortedLinkedList
         return $current->data;
     }
 
+    public function removeByIndex(int $index): bool
+    {
+        if ($index < 0 || $index >= $this->size) {
+            throw new OutOfRangeException("Index out of range.");
+        }
+
+        if ($index === 0) {
+            $this->head = $this->head->next;
+        } else {
+            $current = $this->head;
+            $prev = null;
+            for ($i = 0; $i < $index; $i++) {
+                $prev = $current;
+                $current = $current->next;
+            }
+            $prev->next = $current->next;
+        }
+
+        $this->size--;
+        return true;
+    }
+
+    public function show(): string
+    {
+        $result = [];
+        $current = $this->head;
+        while ($current !== null) {
+            $result[] = $current->data;
+            $current = $current->next;
+        }
+        return implode(', ', $result);
+    }
+
+    public function getFirst()
+    {
+        if ($this->isEmpty()) {
+            throw new ElementNotFoundException("List is empty.");
+        }
+
+        return $this->head->data;
+    }
+
+    public function getLast()
+    {
+        if ($this->isEmpty()) {
+            throw new ElementNotFoundException("List is empty.");
+        }
+
+        $current = $this->head;
+        while ($current->next !== null) {
+            $current = $current->next;
+        }
+
+        return $current->data;
+    }
+
     public function __toString()
     {
         $result = [];
