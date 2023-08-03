@@ -5,7 +5,6 @@ namespace SortedLinkedList;
 use SortedLinkedList\Node;
 use SortedLinkedList\InvalidDataTypeException;
 use SortedLinkedList\ElementNotFoundException;
-use SortedLinkedList\OutOfRangeException;
 use \InvalidArgumentException;
 
 class SortedLinkedList
@@ -67,18 +66,14 @@ class SortedLinkedList
     public function remove($data): bool
     {
         $this->validateDataType($data);
-
-        if ($this->isEmpty()) {
-            return false;
-        }
-
+    
         $current = $this->head;
         $prev = null;
         while ($current !== null && $data !== $current->data) {
             $prev = $current;
             $current = $current->next;
         }
-
+    
         if ($current !== null) {
             if ($prev === null) {
                 $this->head = $current->next;
@@ -88,9 +83,9 @@ class SortedLinkedList
             $this->size--;
             return true;
         }
-
+    
         throw new ElementNotFoundException("Data not found in the SortedLinkedList.");
-    }
+    }    
 
     public function size(): int
     {
@@ -114,7 +109,7 @@ class SortedLinkedList
     public function get(int $index)
     {
         if ($index < 0 || $index >= $this->size) {
-            throw new OutOfRangeException("Index out of range.");
+            throw new ElementNotFoundException("Element not found.");
         }
     
         $current = $this->head;
@@ -130,7 +125,7 @@ class SortedLinkedList
     public function removeByIndex(int $index): bool
     {
         if ($index < 0 || $index >= $this->size) {
-            throw new OutOfRangeException("Index out of range.");
+            throw new ElementNotFoundException("Element not found.");
         }
 
         if ($index === 0) {
