@@ -97,4 +97,25 @@ class SortedLinkedList
 
         throw new ElementNotFoundException("Data not found in the SortedLinkedList.");
     }
+
+    public function size(): int
+    {
+        return $this->size;
+    }
+
+    public function contains($data): bool
+    {
+        if (!is_int($data) && !is_string($data)) {
+            throw new InvalidDataTypeException("Invalid data type. Supported data types: 'string' or 'int'");
+        }
+    
+        $current = $this->head;
+        while ($current !== null) {
+            if ($data === $current->data) {
+                return true;
+            }
+            $current = $current->next;
+        }
+        return false;
+    }
 }
