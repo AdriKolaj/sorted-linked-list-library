@@ -5,6 +5,7 @@ namespace SortedLinkedList;
 use SortedLinkedList\Node;
 use SortedLinkedList\InvalidDataTypeException;
 use SortedLinkedList\ElementNotFoundException;
+use SortedLinkedList\OutOfRangeException;
 use \InvalidArgumentException;
 
 class SortedLinkedList
@@ -24,6 +25,19 @@ class SortedLinkedList
         $this->size = 0;
     }
 
+    private function validateDataType($data): void
+    {
+        $dataType = $this->dataType === 'string' ? 'string' : 'integer';
+
+        if (!is_string($data) && !is_int($data)) {
+            throw new InvalidDataTypeException("Invalid data type. Supported data types: 'string' or 'int'");
+        }
+
+        if (gettype($data) !== $dataType) {
+            throw new InvalidDataTypeException("Data type mismatch. This SortedLinkedList can only hold '{$this->dataType}' values.");
+        }
+    }
+
     public function isEmpty(): bool
     {
         return $this->head === null;
@@ -31,17 +45,7 @@ class SortedLinkedList
 
     public function add($data): void
     {
-        if (!is_int($data) && !is_string($data)) {
-            throw new InvalidDataTypeException("Invalid data type. Supported data types: 'string' or 'int'");
-        }
-    
-        if ($this->dataType === 'string' && !is_string($data)) {
-            throw new InvalidDataTypeException("Data type mismatch. This SortedLinkedList can only hold 'string' values.");
-        }
-    
-        if ($this->dataType === 'int' && !is_int($data)) {
-            throw new InvalidDataTypeException("Data type mismatch. This SortedLinkedList can only hold 'int' values.");
-        }
+        $this->validateDataType($data);
 
         $newNode = new Node($data);
 
@@ -62,20 +66,10 @@ class SortedLinkedList
 
     public function remove($data): bool
     {
+        $this->validateDataType($data);
+
         if ($this->isEmpty()) {
             return false;
-        }
-
-        if (!is_int($data) && !is_string($data)) {
-            throw new InvalidDataTypeException("Invalid data type. Supported data types: 'string' or 'int'");
-        }
-    
-        if ($this->dataType === 'string' && !is_string($data)) {
-            throw new InvalidDataTypeException("Data type mismatch. This SortedLinkedList can only hold 'string' values.");
-        }
-    
-        if ($this->dataType === 'int' && !is_int($data)) {
-            throw new InvalidDataTypeException("Data type mismatch. This SortedLinkedList can only hold 'int' values.");
         }
 
         $current = $this->head;
@@ -105,9 +99,7 @@ class SortedLinkedList
 
     public function contains($data): bool
     {
-        if (!is_int($data) && !is_string($data)) {
-            throw new InvalidDataTypeException("Invalid data type. Supported data types: 'string' or 'int'");
-        }
+        $this->validateDataType($data);
     
         $current = $this->head;
         while ($current !== null) {
@@ -117,5 +109,32 @@ class SortedLinkedList
             $current = $current->next;
         }
         return false;
+    }
+
+    public function get(int $index)
+    {
+        if ($index < 0 || $index >= $this->size) {
+            throw new OutOfRangeException("Index out of range.");
+        }
+    
+        $current = $this->head;
+        for ($i = 0; $i < $index; $i++) {
+            $current = $current->next;
+        }
+    
+        $this->validateDataType($current->data);
+    
+        return $current->data;
+    }
+
+    public function __toString()
+    {
+        $result = [];
+        $current = $this->head;
+        while ($current !== null) {
+            $result[] = $current->data;
+            $current = $current->next;
+        }
+        return implode(', ', $result);
     }
 }
