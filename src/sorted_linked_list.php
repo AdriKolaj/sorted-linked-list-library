@@ -183,6 +183,23 @@ class SortedLinkedList
         return $current->data;
     }
 
+    public function clear(): void
+    {
+        $this->head = null;
+        $this->size = 0;
+    }
+
+    public function toArray(): array
+    {
+        $result = [];
+        $current = $this->head;
+        while ($current !== null) {
+            $result[] = $current->data;
+            $current = $current->next;
+        }
+        return $result;
+    }
+
     public function __toString()
     {
         $result = [];
